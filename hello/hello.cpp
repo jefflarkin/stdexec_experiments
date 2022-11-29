@@ -7,10 +7,10 @@ int main()
   exec::static_thread_pool ctx(1);
   auto sch = ctx.get_scheduler();
 
-  auto begin = stdexec::schedule(sch);
-  auto hello = stdexec::then(begin, []{
-                printf("Hello, World!\n");
-               });
+  auto hello = stdexec::then(stdexec::schedule(sch), 
+                 []{ printf("Hello, World!\n"); }
+               )
+             | stdexec::then([] { printf("Good Bye, Cruel World!\n");});
   
   stdexec::sync_wait(hello);
 
