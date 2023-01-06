@@ -1,12 +1,15 @@
 #include <cassert>
 #include <cstdio>
+#include <cstdlib>
 #include <experimental/stdexec/execution.hpp>
 #include <experimental/exec/static_thread_pool.hpp>
 #include <experimental/mdspan>
 
 int main()
 {
-  exec::static_thread_pool ctx(1);
+  int num_threads = 1;
+  if (const char* env_num_threads = std::getenv("STDEXEC_NUM_THREADS") ) num_threads = atoi(env_num_threads);
+  exec::static_thread_pool ctx(num_threads);
   auto sch = ctx.get_scheduler();
   const int N = 16;
 
